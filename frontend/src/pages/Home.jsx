@@ -1,124 +1,357 @@
-import { useState, useEffect } from 'react'
-import { listingsAPI } from '../api'
-import ListingCard from '../components/ListingCard'
+import { useState, useEffect } from "react";
+import { listingsAPI } from "../api";
+import ListingCard from "../components/ListingCard";
 
 export default function Home() {
-  const [listings, setListings] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [search, setSearch] = useState('')
-  const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [query, setQuery] = useState('')
+  const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
-    const fetch = async () => {
-      setLoading(true)
+    const fetchListings = async () => {
+      setLoading(true);
       try {
-        const res = await listingsAPI.getAll({ search: query, page, limit: 12 })
-        setListings(res.data.listings)
-        setTotalPages(res.data.pages)
+        const res = await listingsAPI.getAll({
+          search: query,
+          page,
+          limit: 12,
+        });
+        setListings(res.data.listings);
+        setTotalPages(res.data.pages);
       } catch (err) {
-        console.error(err)
+        console.error(err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    fetch()
-  }, [query, page])
+    };
+    fetchListings();
+  }, [query, page]);
 
   const handleSearch = (e) => {
-    e.preventDefault()
-    setQuery(search)
-    setPage(1)
-  }
+    e.preventDefault();
+    setQuery(search);
+    setPage(1);
+  };
 
   return (
-    <div>
-      {/* Hero */}
-      <div style={styles.hero}>
-        <div className="container" style={styles.heroInner}>
-          <p style={styles.heroTag}>✦ Discover the World</p>
-          <h1 style={styles.heroTitle}>Find Unforgettable<br /><em>Local Experiences</em></h1>
-          <p style={styles.heroSub}>Handpicked adventures from locals who know their places best.</p>
-          <form onSubmit={handleSearch} style={styles.searchForm}>
+    <div style={s.page}>
+      <style>{css}</style>
+
+      {/* HERO */}
+      <section style={s.hero}>
+        <div style={s.heroOverlay} />
+        <div style={s.heroContent}>
+          <p style={s.eyebrow}>Experiences from locals, for travelers</p>
+          <h1 style={s.heroTitle}>
+            Discover Your Next
+            <br />
+            Adventure
+          </h1>
+          <form onSubmit={handleSearch} style={s.searchBar}>
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#9ca3af"
+              strokeWidth="2.5"
+              style={{ flexShrink: 0 }}
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
             <input
               type="text"
-              placeholder="Search by title, location, or keyword…"
+              placeholder="Where do you want to go?"
               value={search}
-              onChange={e => setSearch(e.target.value)}
-              style={styles.searchInput}
+              onChange={(e) => setSearch(e.target.value)}
+              style={s.searchInput}
             />
-            <button type="submit" style={styles.searchBtn}>Search</button>
+            <button type="submit" style={s.searchBtn}>
+              Search
+            </button>
           </form>
         </div>
-      </div>
+      </section>
 
-      {/* Feed */}
-      <div className="container" style={{ paddingTop: 48, paddingBottom: 64 }}>
-        {query && (
-          <div style={styles.searchInfo}>
-            Results for "<strong>{query}</strong>"
-            <button onClick={() => { setQuery(''); setSearch(''); setPage(1); }} style={styles.clearBtn}>✕ Clear</button>
-          </div>
-        )}
+      {/* FEED */}
+      <section style={s.feed}>
+        <div style={s.feedTop}>
+          {query ? (
+            <>
+              <h2 style={s.feedTitle}>"{query}"</h2>
+              <button
+                onClick={() => {
+                  setQuery("");
+                  setSearch("");
+                  setPage(1);
+                }}
+                style={s.clearBtn}
+              >
+                Clear
+              </button>
+            </>
+          ) : (
+            <h2 style={s.feedTitle}>Latest Experiences</h2>
+          )}
+        </div>
 
         {loading ? (
-          <div style={styles.loading}>
-            {[...Array(6)].map((_, i) => <div key={i} style={styles.skeleton} />)}
+          <div style={s.grid}>
+            {[...Array(8)].map((_, i) => (
+              <div key={i} style={s.skel}>
+                <div style={s.skelImg} className="shimmer" />
+                <div style={s.skelBody}>
+                  <div
+                    style={{ ...s.skelLine, width: "55%" }}
+                    className="shimmer"
+                  />
+                  <div
+                    style={{ ...s.skelLine, width: "80%", height: 11 }}
+                    className="shimmer"
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         ) : listings.length === 0 ? (
-          <div style={styles.empty}>
-            <p style={{ fontSize: 48 }}>🌍</p>
-            <p style={{ fontSize: 20, fontFamily: "'Playfair Display', serif", marginTop: 12 }}>No experiences found</p>
-            <p style={{ color: '#9e9080', marginTop: 6 }}>Try a different search or be the first to post one!</p>
+          <div style={s.empty}>
+            <p style={s.emptyIcon}>🌍</p>
+            <h3 style={s.emptyTitle}>No results found</h3>
+            <p style={s.emptySub}>
+              Try searching something else or post the first experience.
+            </p>
           </div>
         ) : (
           <>
-            <div style={styles.grid}>
-              {listings.map(l => <ListingCard key={l.id} listing={l} />)}
+            <div style={s.grid}>
+              {listings.map((l) => (
+                <ListingCard key={l.id} listing={l} />
+              ))}
             </div>
             {totalPages > 1 && (
-              <div style={styles.pagination}>
-                <button onClick={() => setPage(p => p - 1)} disabled={page === 1} style={styles.pageBtn}>← Prev</button>
-                <span style={styles.pageInfo}>Page {page} of {totalPages}</span>
-                <button onClick={() => setPage(p => p + 1)} disabled={page === totalPages} style={styles.pageBtn}>Next →</button>
+              <div style={s.pagination}>
+                <button
+                  onClick={() => setPage((p) => p - 1)}
+                  disabled={page === 1}
+                  style={{ ...s.pageBtn, opacity: page === 1 ? 0.35 : 1 }}
+                >
+                  ← Prev
+                </button>
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setPage(i + 1)}
+                    style={{
+                      ...s.pageNum,
+                      ...(page === i + 1 ? s.pageActive : {}),
+                    }}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setPage((p) => p + 1)}
+                  disabled={page === totalPages}
+                  style={{
+                    ...s.pageBtn,
+                    opacity: page === totalPages ? 0.35 : 1,
+                  }}
+                >
+                  Next →
+                </button>
               </div>
             )}
           </>
         )}
-      </div>
+      </section>
     </div>
-  )
+  );
 }
 
-const styles = {
+const css = `
+  @keyframes shimmer {
+    0% { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+  }
+  .shimmer {
+    background: linear-gradient(90deg, #f3f4f6 25%, #e9eaec 50%, #f3f4f6 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+  .listing-card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.1) !important;
+  }
+`;
+
+const s = {
+  page: { background: "#f9fafb", minHeight: "100vh" },
+
   hero: {
-    background: 'linear-gradient(135deg, #1a1208 0%, #3d2b10 50%, #c4622d 100%)',
-    padding: '72px 0 64px',
-    position: 'relative',
-    overflow: 'hidden',
+    position: "relative",
+    height: 420,
+    backgroundImage:
+      "url(https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600&q=85)",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  heroInner: { position: 'relative', zIndex: 1 },
-  heroTag: { color: '#e07a4a', fontWeight: 500, fontSize: 14, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 16 },
-  heroTitle: { fontFamily: "'Playfair Display', serif", fontSize: 'clamp(36px, 5vw, 60px)', color: 'white', lineHeight: 1.15, marginBottom: 16 },
-  heroSub: { color: 'rgba(255,255,255,0.7)', fontSize: 18, marginBottom: 36, maxWidth: 500 },
-  searchForm: { display: 'flex', gap: 12, maxWidth: 560 },
+  heroOverlay: {
+    position: "absolute",
+    inset: 0,
+    background:
+      "linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.55) 100%)",
+  },
+  heroContent: {
+    position: "relative",
+    zIndex: 1,
+    textAlign: "center",
+    padding: "0 24px",
+    width: "100%",
+    maxWidth: 600,
+  },
+  eyebrow: {
+    color: "rgba(255,255,255,0.75)",
+    fontSize: 13,
+    fontWeight: 500,
+    letterSpacing: 0.5,
+    marginBottom: 14,
+  },
+  heroTitle: {
+    color: "white",
+    fontSize: "clamp(30px, 5vw, 48px)",
+    fontWeight: 800,
+    lineHeight: 1.15,
+    marginBottom: 28,
+    letterSpacing: "-0.5px",
+  },
+  searchBar: {
+    display: "flex",
+    alignItems: "center",
+    background: "white",
+    borderRadius: 12,
+    padding: "6px 6px 6px 16px",
+    gap: 10,
+    boxShadow: "0 8px 30px rgba(0,0,0,0.15)",
+  },
   searchInput: {
-    flex: 1, padding: '14px 20px', borderRadius: 50, border: 'none',
-    fontSize: 15, background: 'white', color: '#1a1208',
+    flex: 1,
+    border: "none",
+    background: "transparent",
+    fontSize: 14,
+    color: "#111827",
+    padding: "8px 4px",
+    outline: "none",
+    fontFamily: "'Plus Jakarta Sans', sans-serif",
   },
   searchBtn: {
-    background: '#c4622d', color: 'white', padding: '14px 28px',
-    borderRadius: 50, fontWeight: 600, fontSize: 15, whiteSpace: 'nowrap',
-    transition: 'background 0.2s',
+    background: "#111827",
+    color: "white",
+    padding: "11px 22px",
+    borderRadius: 8,
+    fontWeight: 700,
+    fontSize: 14,
+    fontFamily: "'Plus Jakarta Sans', sans-serif",
+    flexShrink: 0,
   },
-  searchInfo: { marginBottom: 24, fontSize: 16, color: '#4a3f2f', display: 'flex', alignItems: 'center', gap: 12 },
-  clearBtn: { background: 'none', color: '#c4622d', fontWeight: 600, cursor: 'pointer', fontSize: 14 },
-  grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 28 },
-  loading: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 28 },
-  skeleton: { height: 320, borderRadius: 16, background: 'linear-gradient(90deg, #f0ebe0 25%, #e8e0cc 50%, #f0ebe0 75%)', backgroundSize: '200% 100%' },
-  empty: { textAlign: 'center', padding: '80px 0', color: '#4a3f2f' },
-  pagination: { display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 20, marginTop: 48 },
-  pageBtn: { background: '#c4622d', color: 'white', padding: '10px 24px', borderRadius: 50, fontWeight: 500, fontSize: 15, disabled: { opacity: 0.4 } },
-  pageInfo: { color: '#4a3f2f', fontWeight: 500 },
-}
+
+  feed: {
+    maxWidth: 1280,
+    margin: "0 auto",
+    padding: "44px 48px 80px",
+  },
+  feedTop: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 28,
+  },
+  feedTitle: {
+    fontSize: 20,
+    fontWeight: 700,
+    color: "#111827",
+  },
+  clearBtn: {
+    fontSize: 13,
+    fontWeight: 600,
+    color: "#6b7280",
+    background: "#f3f4f6",
+    border: "none",
+    padding: "6px 14px",
+    borderRadius: 8,
+    cursor: "pointer",
+  },
+
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(270px, 1fr))",
+    gap: 20,
+  },
+
+  skel: {
+    background: "white",
+    borderRadius: 14,
+    overflow: "hidden",
+    border: "1px solid #f3f4f6",
+  },
+  skelImg: { height: 190 },
+  skelBody: {
+    padding: "14px 16px",
+    display: "flex",
+    flexDirection: "column",
+    gap: 9,
+  },
+  skelLine: { height: 13, borderRadius: 6 },
+
+  empty: { textAlign: "center", padding: "80px 0" },
+  emptyIcon: { fontSize: 44, marginBottom: 14 },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: 700,
+    color: "#111827",
+    marginBottom: 6,
+  },
+  emptySub: { fontSize: 14, color: "#9ca3af" },
+
+  pagination: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 8,
+    marginTop: 48,
+  },
+  pageBtn: {
+    background: "white",
+    color: "#374151",
+    border: "1.5px solid #e5e7eb",
+    padding: "8px 16px",
+    borderRadius: 8,
+    fontWeight: 600,
+    fontSize: 13,
+    cursor: "pointer",
+    fontFamily: "'Plus Jakarta Sans', sans-serif",
+  },
+  pageNum: {
+    width: 34,
+    height: 34,
+    borderRadius: 8,
+    border: "1.5px solid #e5e7eb",
+    background: "white",
+    color: "#6b7280",
+    fontWeight: 600,
+    fontSize: 13,
+    cursor: "pointer",
+    fontFamily: "'Plus Jakarta Sans', sans-serif",
+  },
+  pageActive: {
+    background: "#111827",
+    color: "white",
+    border: "1.5px solid #111827",
+  },
+};

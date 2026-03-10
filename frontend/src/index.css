@@ -1,54 +1,82 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 :root {
-  --sand: #f5f0e8;
-  --sand-dark: #ede5d0;
-  --ink: #1a1208;
-  --ink-light: #4a3f2f;
-  --terra: #c4622d;
-  --terra-light: #e07a4a;
-  --teal: #2d7d7d;
-  --cream: #faf8f3;
-  --card-shadow: 0 4px 24px rgba(26,18,8,0.10);
-  --radius: 16px;
+  --navy: #1e2d4a;
+  --navy-light: #2c3e6b;
+  --slate: #64748b;
+  --slate-light: #94a3b8;
+  --bg: #f8f9fc;
+  --white: #ffffff;
+  --border: #e2e8f0;
 }
 
 body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--cream);
-  color: var(--ink);
+  font-family: "Outfit", sans-serif;
+  background: var(--bg);
+  color: var(--navy);
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3 { font-family: 'Playfair Display', serif; }
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Syne", sans-serif;
+}
 
-a { text-decoration: none; color: inherit; }
+a {
+  text-decoration: none;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: inherit;
+}
 
-button { cursor: pointer; border: none; outline: none; font-family: inherit; }
-
-input, textarea, select {
+input,
+textarea,
+select {
   font-family: inherit;
   outline: none;
-  border: 1.5px solid var(--sand-dark);
+  border: 1.5px solid var(--border);
   border-radius: 10px;
   padding: 12px 16px;
   font-size: 15px;
   background: white;
   width: 100%;
-  transition: border-color 0.2s;
+  color: var(--navy);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
-
-input:focus, textarea:focus {
-  border-color: var(--terra);
+input:focus,
+textarea:focus {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(30, 45, 74, 0.08);
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 80px;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: var(--sand); }
-::-webkit-scrollbar-thumb { background: var(--terra-light); border-radius: 4px; }
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
