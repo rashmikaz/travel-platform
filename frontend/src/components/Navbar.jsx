@@ -15,24 +15,16 @@ export default function Navbar() {
         <Link to="/" style={s.logo}>
           Wandr
         </Link>
-        <div style={s.links}>
-          <Link to="/" style={s.link}>
-            Home
-          </Link>
-          <Link to="/#feed" style={s.link}>
-            Experiences
-          </Link>
-        </div>
         <div style={s.actions}>
           {user ? (
             <>
               <Link to="/my-listings" style={s.link}>
                 {user.name}
               </Link>
-              <Link to="/create" style={s.btnPrimary}>
+              <Link to="/create" style={s.btnDark}>
                 + New
               </Link>
-              <button onClick={handleLogout} style={s.btnGhost}>
+              <button onClick={handleLogout} style={s.btnOutline}>
                 Log out
               </button>
             </>
@@ -41,7 +33,7 @@ export default function Navbar() {
               <Link to="/login" style={s.link}>
                 Log in
               </Link>
-              <Link to="/register" style={s.btnPrimary}>
+              <Link to="/register" style={s.btnDark}>
                 Sign up
               </Link>
             </>
@@ -55,11 +47,10 @@ export default function Navbar() {
 const s = {
   nav: {
     background: "white",
-    borderBottom: "1px solid #eef0f5",
+    borderBottom: "1px solid #f3f4f6",
     position: "sticky",
     top: 0,
     zIndex: 100,
-    boxShadow: "0 1px 8px rgba(30,45,74,0.06)",
   },
   inner: {
     maxWidth: 1280,
@@ -67,43 +58,46 @@ const s = {
     padding: "0 48px",
     display: "flex",
     alignItems: "center",
-    height: 66,
-    gap: 40,
+    justifyContent: "space-between",
+    height: 62,
   },
   logo: {
-    fontFamily: "'Syne', sans-serif",
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 800,
-    color: "#1e2d4a",
-    letterSpacing: "-0.3px",
-    marginRight: 8,
+    color: "#111827",
+    letterSpacing: 2,
+    textTransform: "uppercase",
   },
-  links: { display: "flex", gap: 28, flex: 1 },
+  actions: { display: "flex", alignItems: "center", gap: 14 },
   link: {
-    color: "#64748b",
-    fontWeight: 500,
-    fontSize: 15,
-    fontFamily: "'Outfit', sans-serif",
+    color: "#6b7280",
+    fontWeight: 600,
+    fontSize: 13,
+    letterSpacing: 1,
+    textTransform: "uppercase",
   },
-  actions: { display: "flex", alignItems: "center", gap: 12 },
-  btnPrimary: {
-    background: "#1e2d4a",
+  btnDark: {
+    background: "#111827",
     color: "white",
     padding: "9px 20px",
-    borderRadius: 8,
-    fontWeight: 600,
-    fontSize: 14,
-    fontFamily: "'Outfit', sans-serif",
+    borderRadius: 7,
+    fontWeight: 700,
+    fontSize: 11,
+    letterSpacing: 1.5,
+    textTransform: "uppercase",
+    fontFamily: "'Raleway', sans-serif",
   },
-  btnGhost: {
-    background: "transparent",
-    color: "#64748b",
-    border: "1.5px solid #eef0f5",
-    padding: "8px 16px",
-    borderRadius: 8,
-    fontWeight: 500,
-    fontSize: 14,
+  btnOutline: {
+    background: "white",
+    color: "#374151",
+    border: "1.5px solid #e5e7eb",
+    padding: "8px 18px",
+    borderRadius: 7,
+    fontWeight: 700,
+    fontSize: 11,
+    letterSpacing: 1.5,
+    textTransform: "uppercase",
     cursor: "pointer",
-    fontFamily: "'Outfit', sans-serif",
+    fontFamily: "'Raleway', sans-serif",
   },
 };

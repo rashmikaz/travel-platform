@@ -52,8 +52,8 @@ export default function Home() {
           </h1>
           <form onSubmit={handleSearch} style={s.searchBar}>
             <svg
-              width="17"
-              height="17"
+              width="16"
+              height="16"
               viewBox="0 0 24 24"
               fill="none"
               stroke="#9ca3af"
@@ -119,7 +119,6 @@ export default function Home() {
           </div>
         ) : listings.length === 0 ? (
           <div style={s.empty}>
-            <p style={s.emptyIcon}>🌍</p>
             <h3 style={s.emptyTitle}>No results found</h3>
             <p style={s.emptySub}>
               Try searching something else or post the first experience.
@@ -206,7 +205,7 @@ const s = {
     position: "absolute",
     inset: 0,
     background:
-      "linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.55) 100%)",
+      "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.55) 100%)",
   },
   heroContent: {
     position: "relative",
@@ -214,28 +213,30 @@ const s = {
     textAlign: "center",
     padding: "0 24px",
     width: "100%",
-    maxWidth: 600,
+    maxWidth: 580,
   },
   eyebrow: {
-    color: "rgba(255,255,255,0.75)",
-    fontSize: 13,
-    fontWeight: 500,
-    letterSpacing: 0.5,
-    marginBottom: 14,
+    color: "rgba(255,255,255,0.7)",
+    fontSize: 12,
+    fontWeight: 600,
+    letterSpacing: 3,
+    textTransform: "uppercase",
+    marginBottom: 16,
   },
   heroTitle: {
     color: "white",
-    fontSize: "clamp(30px, 5vw, 48px)",
+    fontSize: "clamp(30px, 5vw, 52px)",
     fontWeight: 800,
     lineHeight: 1.15,
     marginBottom: 28,
-    letterSpacing: "-0.5px",
+    letterSpacing: 1,
+    textTransform: "uppercase",
   },
   searchBar: {
     display: "flex",
     alignItems: "center",
     background: "white",
-    borderRadius: 12,
+    borderRadius: 10,
     padding: "6px 6px 6px 16px",
     gap: 10,
     boxShadow: "0 8px 30px rgba(0,0,0,0.15)",
@@ -248,24 +249,23 @@ const s = {
     color: "#111827",
     padding: "8px 4px",
     outline: "none",
-    fontFamily: "'Plus Jakarta Sans', sans-serif",
+    letterSpacing: 0.5,
+    fontFamily: "'Raleway', sans-serif",
   },
   searchBtn: {
     background: "#111827",
     color: "white",
     padding: "11px 22px",
-    borderRadius: 8,
+    borderRadius: 7,
     fontWeight: 700,
-    fontSize: 14,
-    fontFamily: "'Plus Jakarta Sans', sans-serif",
+    fontSize: 12,
+    letterSpacing: 1.5,
+    textTransform: "uppercase",
+    fontFamily: "'Raleway', sans-serif",
     flexShrink: 0,
   },
 
-  feed: {
-    maxWidth: 1280,
-    margin: "0 auto",
-    padding: "44px 48px 80px",
-  },
+  feed: { maxWidth: 1280, margin: "0 auto", padding: "44px 48px 80px" },
   feedTop: {
     display: "flex",
     alignItems: "center",
@@ -273,18 +273,22 @@ const s = {
     marginBottom: 28,
   },
   feedTitle: {
-    fontSize: 20,
-    fontWeight: 700,
+    fontSize: 18,
+    fontWeight: 800,
     color: "#111827",
+    letterSpacing: 1,
+    textTransform: "uppercase",
   },
   clearBtn: {
-    fontSize: 13,
-    fontWeight: 600,
+    fontSize: 12,
+    fontWeight: 700,
     color: "#6b7280",
     background: "#f3f4f6",
     border: "none",
-    padding: "6px 14px",
-    borderRadius: 8,
+    letterSpacing: 1,
+    textTransform: "uppercase",
+    padding: "7px 14px",
+    borderRadius: 7,
     cursor: "pointer",
   },
 
@@ -296,7 +300,7 @@ const s = {
 
   skel: {
     background: "white",
-    borderRadius: 14,
+    borderRadius: 12,
     overflow: "hidden",
     border: "1px solid #f3f4f6",
   },
@@ -310,14 +314,14 @@ const s = {
   skelLine: { height: 13, borderRadius: 6 },
 
   empty: { textAlign: "center", padding: "80px 0" },
-  emptyIcon: { fontSize: 44, marginBottom: 14 },
   emptyTitle: {
     fontSize: 18,
-    fontWeight: 700,
+    fontWeight: 800,
     color: "#111827",
-    marginBottom: 6,
+    marginBottom: 8,
+    letterSpacing: 0.5,
   },
-  emptySub: { fontSize: 14, color: "#9ca3af" },
+  emptySub: { fontSize: 14, color: "#9ca3af", letterSpacing: 0.3 },
 
   pagination: {
     display: "flex",
@@ -331,23 +335,25 @@ const s = {
     color: "#374151",
     border: "1.5px solid #e5e7eb",
     padding: "8px 16px",
-    borderRadius: 8,
-    fontWeight: 600,
-    fontSize: 13,
+    borderRadius: 7,
+    fontWeight: 700,
+    fontSize: 11,
+    letterSpacing: 1,
+    textTransform: "uppercase",
     cursor: "pointer",
-    fontFamily: "'Plus Jakarta Sans', sans-serif",
+    fontFamily: "'Raleway', sans-serif",
   },
   pageNum: {
     width: 34,
     height: 34,
-    borderRadius: 8,
+    borderRadius: 7,
     border: "1.5px solid #e5e7eb",
     background: "white",
     color: "#6b7280",
-    fontWeight: 600,
+    fontWeight: 700,
     fontSize: 13,
     cursor: "pointer",
-    fontFamily: "'Plus Jakarta Sans', sans-serif",
+    fontFamily: "'Raleway', sans-serif",
   },
   pageActive: {
     background: "#111827",

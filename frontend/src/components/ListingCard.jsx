@@ -13,52 +13,37 @@ export default function ListingCard({ listing }) {
     createdAt,
     likes,
   } = listing;
-
   return (
-    <Link to={`/listing/${id}`} style={s.card}>
+    <Link to={`/listing/${id}`} style={s.card} className="listing-card">
+      <style>{`.listing-card img { transition: transform 0.35s ease; } .listing-card:hover img { transform: scale(1.04); }`}</style>
       <div style={s.imgWrap}>
         <img
           src={imageUrl}
           alt={title}
           style={s.img}
-          onError={(e) => {
-            e.target.src =
-              "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600";
-          }}
+          onError={(e) =>
+            (e.target.src =
+              "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600")
+          }
         />
-        {price && <div style={s.priceBadge}>${price}</div>}
+        {price && <span style={s.price}>${price}</span>}
       </div>
       <div style={s.body}>
-        <div style={s.topRow}>
-          <span style={s.location}>
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#1e2d4a"
-              strokeWidth="2.5"
-              style={{ flexShrink: 0 }}
-            >
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-              <circle cx="12" cy="10" r="3" />
-            </svg>
-            {location}
-          </span>
-          <span style={s.likes}>
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 24 24"
-              fill="#e53e3e"
-              stroke="#e53e3e"
-              strokeWidth="1.5"
-            >
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-            </svg>
-            {likes?.length || 0}
-          </span>
-        </div>
+        <p style={s.location}>
+          <svg
+            width="10"
+            height="10"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#9ca3af"
+            strokeWidth="2.5"
+            style={{ flexShrink: 0 }}
+          >
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+          {location}
+        </p>
         <h3 style={s.title}>{title}</h3>
         <p style={s.desc}>
           {description.length > 80
@@ -66,7 +51,7 @@ export default function ListingCard({ listing }) {
             : description}
         </p>
         <div style={s.footer}>
-          <div style={s.authorRow}>
+          <div style={s.author}>
             <div style={s.avatar}>{user?.name?.charAt(0).toUpperCase()}</div>
             <span style={s.authorName}>{user?.name}</span>
           </div>
@@ -82,89 +67,85 @@ export default function ListingCard({ listing }) {
 const s = {
   card: {
     background: "white",
-    borderRadius: 16,
+    borderRadius: 12,
     overflow: "hidden",
-    boxShadow: "0 2px 16px rgba(0,0,0,0.07)",
     display: "block",
     color: "inherit",
+    border: "1px solid #f3f4f6",
+    boxShadow: "0 1px 8px rgba(0,0,0,0.06)",
     transition: "transform 0.2s, box-shadow 0.2s",
-    border: "1px solid #f1f5f9",
   },
   imgWrap: {
     position: "relative",
-    height: 190,
+    height: 195,
     overflow: "hidden",
-    background: "#f1f5f9",
+    background: "#f3f4f6",
   },
-  img: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    transition: "transform 0.3s",
-    display: "block",
-  },
-  priceBadge: {
+  img: { width: "100%", height: "100%", objectFit: "cover", display: "block" },
+  price: {
     position: "absolute",
-    top: 12,
-    right: 12,
-    background: "#1e2d4a",
+    top: 10,
+    right: 10,
+    background: "#111827",
     color: "white",
-    padding: "4px 12px",
-    borderRadius: 6,
-    fontWeight: 700,
-    fontSize: 13,
+    padding: "4px 10px",
+    borderRadius: 5,
+    fontSize: 11,
+    fontWeight: 800,
+    letterSpacing: 0.5,
   },
-  body: { padding: "16px 18px 20px" },
-  topRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 10,
-  },
+  body: { padding: "14px 16px 18px" },
   location: {
     display: "flex",
     alignItems: "center",
-    gap: 5,
-    fontSize: 13,
-    color: "#1e2d4a",
-    fontWeight: 600,
-  },
-  likes: {
-    display: "flex",
-    alignItems: "center",
     gap: 4,
-    fontSize: 13,
-    color: "#64748b",
-    fontWeight: 500,
+    fontSize: 10,
+    fontWeight: 700,
+    color: "#9ca3af",
+    textTransform: "uppercase",
+    letterSpacing: 1.5,
+    marginBottom: 8,
   },
   title: {
-    fontFamily: "'Playfair Display', serif",
-    fontSize: 17,
-    color: "#0f172a",
-    marginBottom: 8,
-    lineHeight: 1.35,
+    fontSize: 15,
+    fontWeight: 800,
+    color: "#111827",
+    marginBottom: 6,
+    lineHeight: 1.3,
+    letterSpacing: 0.2,
   },
-  desc: { fontSize: 13, color: "#64748b", lineHeight: 1.6, marginBottom: 16 },
+  desc: {
+    fontSize: 13,
+    color: "#6b7280",
+    lineHeight: 1.65,
+    marginBottom: 14,
+    letterSpacing: 0.2,
+  },
   footer: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    borderTop: "1px solid #f1f5f9",
     paddingTop: 12,
+    borderTop: "1px solid #f9fafb",
   },
-  authorRow: { display: "flex", alignItems: "center", gap: 8 },
+  author: { display: "flex", alignItems: "center", gap: 7 },
   avatar: {
-    width: 28,
-    height: 28,
+    width: 24,
+    height: 24,
     borderRadius: "50%",
-    background: "#1e2d4a",
+    background: "#111827",
     color: "white",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    fontSize: 10,
+    fontWeight: 800,
+  },
+  authorName: {
     fontSize: 12,
     fontWeight: 700,
+    color: "#374151",
+    letterSpacing: 0.3,
   },
-  authorName: { fontSize: 13, fontWeight: 600, color: "#0f172a" },
-  time: { fontSize: 12, color: "#94a3b8" },
+  time: { fontSize: 11, color: "#9ca3af", letterSpacing: 0.2 },
 };
