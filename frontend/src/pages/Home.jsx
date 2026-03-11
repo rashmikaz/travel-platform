@@ -18,15 +18,15 @@ export default function Home() {
   ];
 
   useEffect(() => {
-    const timer = setInterval(
+    const t = setInterval(
       () => setHeroImg((i) => (i + 1) % heroImages.length),
       5000,
     );
-    return () => clearInterval(timer);
+    return () => clearInterval(t);
   }, []);
 
   useEffect(() => {
-    const fetchListings = async () => {
+    const fetch = async () => {
       setLoading(true);
       try {
         const res = await listingsAPI.getAll({
@@ -42,7 +42,7 @@ export default function Home() {
         setLoading(false);
       }
     };
-    fetchListings();
+    fetch();
   }, [query, page]);
 
   const handleSearch = (e) => {
@@ -56,9 +56,9 @@ export default function Home() {
       <style>{css}</style>
 
       {/* HERO — split layout */}
-      <section style={s.hero}>
-        {/* LEFT — text + search */}
-        <div style={s.heroLeft} className="hero-fade">
+      <section style={s.hero} className="hero-section">
+        {/* LEFT */}
+        <div style={s.heroLeft} className="hero-left">
           <p style={s.eyebrow}>· Travel · Explore · Experience ·</p>
           <h1 style={s.heroTitle}>
             Discover
@@ -71,7 +71,6 @@ export default function Home() {
             Handpicked local experiences from passionate guides around the
             world.
           </p>
-
           <form onSubmit={handleSearch} style={s.searchBar}>
             <svg
               width="15"
@@ -96,8 +95,7 @@ export default function Home() {
               Search
             </button>
           </form>
-
-          <div style={s.stats}>
+          <div style={s.stats} className="hero-stats">
             {[
               ["2,400+", "Experiences"],
               ["120+", "Countries"],
@@ -111,8 +109,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* RIGHT — image slideshow */}
-        <div style={s.heroRight} className="hero-fade-delay">
+        {/* RIGHT — image */}
+        <div style={s.heroRight} className="hero-right">
           {heroImages.map((img, i) => (
             <div
               key={i}
@@ -125,9 +123,7 @@ export default function Home() {
             />
           ))}
           <div style={s.imgOverlay} />
-
-          {/* Floating card on image */}
-          <div style={s.floatCard}>
+          <div style={s.floatCard} className="float-anim">
             <img
               src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=200&q=80"
               alt="Bali"
@@ -138,8 +134,6 @@ export default function Home() {
               <p style={s.floatSub}>Most popular · 4.9 ★</p>
             </div>
           </div>
-
-          {/* Slide dots */}
           <div style={s.dots}>
             {heroImages.map((_, i) => (
               <button
@@ -196,7 +190,7 @@ export default function Home() {
           <div style={s.empty}>
             <h3 style={s.emptyTitle}>No Results Found</h3>
             <p style={s.emptySub}>
-              Try searching something else or post the first experience.
+              Try a different search or be the first to post.
             </p>
           </div>
         ) : (
@@ -247,44 +241,35 @@ export default function Home() {
 }
 
 const css = `
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes shimmer { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+  @keyframes floatUp { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .float-anim { animation: floatUp 4s ease-in-out infinite; }
+  .shimmer { background: linear-gradient(90deg,#f3f4f6 25%,#e9eaec 50%,#f3f4f6 75%); background-size:800px 100%; animation:shimmer 1.4s ease-in-out infinite; }
+  .listing-card:hover { transform:translateY(-3px) !important; box-shadow:0 10px 28px rgba(0,0,0,0.1) !important; }
+
+  @media (max-width: 900px) {
+    .hero-section { grid-template-columns: 1fr !important; min-height: auto !important; }
+    .hero-right { display: none !important; }
+    .hero-left { padding: 48px 32px !important; }
+    .hero-stats { gap: 20px !important; }
   }
-  @keyframes shimmer {
-    0% { background-position: -400px 0; }
-    100% { background-position: 400px 0; }
-  }
-  @keyframes floatUp {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-8px); }
-  }
-  .hero-fade { animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) both; }
-  .hero-fade-delay { animation: fadeUp 0.7s 0.15s cubic-bezier(.22,1,.36,1) both; }
-  .shimmer {
-    background: linear-gradient(90deg, #f3f4f6 25%, #e9eaec 50%, #f3f4f6 75%);
-    background-size: 800px 100%;
-    animation: shimmer 1.4s ease-in-out infinite;
-  }
-  .listing-card:hover {
-    transform: translateY(-3px) !important;
-    box-shadow: 0 10px 28px rgba(0,0,0,0.1) !important;
+  @media (max-width: 600px) {
+    .hero-left { padding: 36px 20px !important; }
+    .hero-stats { flex-wrap: wrap; gap: 16px !important; }
   }
 `;
 
+const F = "'Raleway', sans-serif";
 const s = {
   page: { background: "#f9fafb", minHeight: "100vh" },
-
-  // HERO
   hero: {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
-    minHeight: 540,
+    minHeight: 560,
     background: "white",
     borderBottom: "1px solid #f3f4f6",
   },
-
-  // LEFT
   heroLeft: {
     display: "flex",
     flexDirection: "column",
@@ -292,17 +277,17 @@ const s = {
     padding: "64px 56px 64px 80px",
   },
   eyebrow: {
+    fontFamily: F,
     fontSize: 10,
     fontWeight: 700,
     letterSpacing: 3,
     color: "#9ca3af",
     textTransform: "uppercase",
     marginBottom: 20,
-    fontFamily: "'Raleway', sans-serif",
   },
   heroTitle: {
-    fontFamily: "'Raleway', sans-serif",
-    fontSize: "clamp(38px, 4vw, 60px)",
+    fontFamily: F,
+    fontSize: "clamp(32px, 4vw, 58px)",
     fontWeight: 800,
     color: "#0f172a",
     lineHeight: 1.05,
@@ -311,11 +296,11 @@ const s = {
     marginBottom: 20,
   },
   heroSub: {
-    fontFamily: "'Raleway', sans-serif",
+    fontFamily: F,
     fontSize: 15,
     color: "#64748b",
     lineHeight: 1.7,
-    marginBottom: 36,
+    marginBottom: 32,
     maxWidth: 360,
     fontWeight: 500,
   },
@@ -329,7 +314,7 @@ const s = {
     gap: 10,
     maxWidth: 420,
     boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-    marginBottom: 40,
+    marginBottom: 36,
   },
   searchInput: {
     flex: 1,
@@ -340,7 +325,7 @@ const s = {
     padding: "9px 4px",
     outline: "none",
     letterSpacing: 0.3,
-    fontFamily: "'Raleway', sans-serif",
+    fontFamily: F,
   },
   searchBtn: {
     background: "#0f172a",
@@ -351,21 +336,16 @@ const s = {
     fontSize: 10,
     letterSpacing: 1.5,
     textTransform: "uppercase",
-    fontFamily: "'Raleway', sans-serif",
+    fontFamily: F,
     flexShrink: 0,
     border: "none",
     cursor: "pointer",
   },
-  stats: { display: "flex", gap: 32 },
+  stats: { display: "flex", gap: 28 },
   stat: { display: "flex", flexDirection: "column", gap: 3 },
-  statNum: {
-    fontFamily: "'Raleway', sans-serif",
-    fontSize: 22,
-    fontWeight: 800,
-    color: "#0f172a",
-  },
+  statNum: { fontFamily: F, fontSize: 20, fontWeight: 800, color: "#0f172a" },
   statLabel: {
-    fontFamily: "'Raleway', sans-serif",
+    fontFamily: F,
     fontSize: 10,
     fontWeight: 700,
     color: "#9ca3af",
@@ -373,12 +353,7 @@ const s = {
     letterSpacing: 1,
   },
 
-  // RIGHT
-  heroRight: {
-    position: "relative",
-    overflow: "hidden",
-    minHeight: 540,
-  },
+  heroRight: { position: "relative", overflow: "hidden" },
   heroBg: {
     position: "absolute",
     inset: 0,
@@ -389,46 +364,43 @@ const s = {
     position: "absolute",
     inset: 0,
     background:
-      "linear-gradient(135deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.35) 100%)",
+      "linear-gradient(135deg,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.35) 100%)",
   },
-
   floatCard: {
     position: "absolute",
     bottom: 36,
     left: 32,
-    background: "rgba(255,255,255,0.18)",
+    zIndex: 2,
+    background: "rgba(255,255,255,0.16)",
     backdropFilter: "blur(20px)",
-    border: "1px solid rgba(255,255,255,0.3)",
-    borderRadius: 16,
-    padding: "12px 18px",
+    border: "1px solid rgba(255,255,255,0.28)",
+    borderRadius: 14,
+    padding: "12px 16px",
     display: "flex",
     alignItems: "center",
-    gap: 12,
+    gap: 11,
     boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
-    zIndex: 2,
-    animation: "floatUp 4s ease-in-out infinite",
   },
   floatThumb: {
-    width: 42,
-    height: 42,
-    borderRadius: 10,
+    width: 40,
+    height: 40,
+    borderRadius: 9,
     objectFit: "cover",
     flexShrink: 0,
   },
   floatTitle: {
-    fontFamily: "'Raleway', sans-serif",
+    fontFamily: F,
     color: "white",
     fontWeight: 700,
-    fontSize: 14,
-    marginBottom: 3,
+    fontSize: 13,
+    marginBottom: 2,
   },
   floatSub: {
-    fontFamily: "'Raleway', sans-serif",
-    color: "rgba(255,255,255,0.75)",
-    fontSize: 12,
+    fontFamily: F,
+    color: "rgba(255,255,255,0.72)",
+    fontSize: 11,
     fontWeight: 500,
   },
-
   dots: {
     position: "absolute",
     bottom: 20,
@@ -449,8 +421,7 @@ const s = {
   },
   dotActive: { background: "white", width: 18, borderRadius: 3 },
 
-  // FEED
-  feed: { maxWidth: 1280, margin: "0 auto", padding: "48px 80px 80px" },
+  feed: { maxWidth: 1280, margin: "0 auto", padding: "48px 48px 80px" },
   feedTop: {
     display: "flex",
     alignItems: "center",
@@ -458,7 +429,7 @@ const s = {
     marginBottom: 28,
   },
   feedTitle: {
-    fontFamily: "'Raleway', sans-serif",
+    fontFamily: F,
     fontSize: 15,
     fontWeight: 800,
     color: "#0f172a",
@@ -466,7 +437,7 @@ const s = {
     textTransform: "uppercase",
   },
   clearBtn: {
-    fontFamily: "'Raleway', sans-serif",
+    fontFamily: F,
     fontSize: 10,
     fontWeight: 700,
     color: "#6b7280",
@@ -478,13 +449,11 @@ const s = {
     borderRadius: 7,
     cursor: "pointer",
   },
-
   grid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(270px, 1fr))",
+    gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
     gap: 20,
   },
-
   skel: {
     background: "white",
     borderRadius: 12,
@@ -499,10 +468,9 @@ const s = {
     gap: 9,
   },
   skelLine: { height: 13, borderRadius: 6 },
-
   empty: { textAlign: "center", padding: "80px 0" },
   emptyTitle: {
-    fontFamily: "'Raleway', sans-serif",
+    fontFamily: F,
     fontSize: 18,
     fontWeight: 800,
     color: "#0f172a",
@@ -510,12 +478,11 @@ const s = {
     letterSpacing: 1,
   },
   emptySub: {
-    fontFamily: "'Raleway', sans-serif",
+    fontFamily: F,
     fontSize: 14,
     color: "#9ca3af",
     letterSpacing: 0.3,
   },
-
   pagination: {
     display: "flex",
     justifyContent: "center",
@@ -534,7 +501,7 @@ const s = {
     letterSpacing: 1,
     textTransform: "uppercase",
     cursor: "pointer",
-    fontFamily: "'Raleway', sans-serif",
+    fontFamily: F,
   },
   pageNum: {
     width: 34,
@@ -546,7 +513,7 @@ const s = {
     fontWeight: 700,
     fontSize: 13,
     cursor: "pointer",
-    fontFamily: "'Raleway', sans-serif",
+    fontFamily: F,
   },
   pageActive: {
     background: "#0f172a",

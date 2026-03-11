@@ -20,7 +20,7 @@ export default function MyListings() {
   }, [user]);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this listing?")) return;
+    if (!window.confirm("Delete?")) return;
     try {
       await listingsAPI.delete(id);
       setListings((l) => l.filter((x) => x.id !== id));
@@ -32,7 +32,8 @@ export default function MyListings() {
 
   return (
     <div style={s.page}>
-      <div style={s.header}>
+      <style>{css}</style>
+      <div style={s.header} className="my-header">
         <div>
           <h1 style={s.title}>My Experiences</h1>
           <p style={s.sub}>
@@ -46,15 +47,12 @@ export default function MyListings() {
       </div>
 
       {loading ? (
-        <div style={s.loadingState}>Loading…</div>
+        <div style={s.empty}>
+          <p style={s.emptySub}>Loading…</p>
+        </div>
       ) : listings.length === 0 ? (
         <div style={s.empty}>
-          <img
-            src="https://images.unsplash.com/photo-1488085061387-422e29b40080?w=400&q=60"
-            alt="empty"
-            style={s.emptyImg}
-          />
-          <h3 style={s.emptyTitle}>No experiences yet</h3>
+          <h3 style={s.emptyTitle}>No Experiences Yet</h3>
           <p style={s.emptySub}>
             Share your first local experience with the world.
           </p>
@@ -65,7 +63,7 @@ export default function MyListings() {
       ) : (
         <div style={s.list}>
           {listings.map((l) => (
-            <div key={l.id} style={s.row}>
+            <div key={l.id} style={s.row} className="my-row">
               <img
                 src={l.imageUrl}
                 alt={l.title}
@@ -79,11 +77,11 @@ export default function MyListings() {
                 <h3 style={s.rowTitle}>{l.title}</h3>
                 <p style={s.rowMeta}>
                   <svg
-                    width="11"
-                    height="11"
+                    width="10"
+                    height="10"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#1e2d4a"
+                    stroke="#9ca3af"
                     strokeWidth="2.5"
                   >
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
@@ -97,7 +95,7 @@ export default function MyListings() {
                 </p>
               </div>
               {l.price && <span style={s.rowPrice}>${l.price}</span>}
-              <div style={s.rowActions}>
+              <div style={s.rowActions} className="my-actions">
                 <Link to={`/listing/${l.id}`} style={s.viewBtn}>
                   View
                 </Link>
@@ -116,142 +114,147 @@ export default function MyListings() {
   );
 }
 
+const css = `
+  @media (max-width: 768px) {
+    .my-header { flex-direction: column !important; align-items: flex-start !important; gap: 16px !important; }
+    .my-row { flex-wrap: wrap !important; gap: 12px !important; }
+    .my-actions { width: 100% !important; justify-content: flex-start !important; }
+  }
+  @media (max-width: 600px) {
+    .my-page { padding: 32px 20px 60px !important; }
+  }
+`;
+const F = "'Raleway', sans-serif";
 const s = {
-  page: { maxWidth: 1280, margin: "0 auto", padding: "52px 48px 80px" },
+  page: { maxWidth: 1280, margin: "0 auto", padding: "48px 48px 80px" },
   header: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    marginBottom: 36,
+    marginBottom: 32,
   },
   title: {
-    fontFamily: "'Syne', sans-serif",
-    fontSize: 32,
+    fontFamily: F,
+    fontSize: "clamp(22px, 3vw, 30px)",
     fontWeight: 800,
     color: "#0f172a",
+    letterSpacing: 1,
+    textTransform: "uppercase",
     marginBottom: 4,
   },
-  sub: { fontFamily: "'Outfit', sans-serif", color: "#94a3b8", fontSize: 15 },
+  sub: { fontFamily: F, color: "#94a3b8", fontSize: 13, fontWeight: 500 },
   newBtn: {
-    background: "#1e2d4a",
+    background: "#0f172a",
     color: "white",
-    padding: "11px 22px",
-    borderRadius: 10,
-    fontWeight: 600,
-    fontSize: 14,
-    fontFamily: "'Outfit', sans-serif",
-  },
-
-  loadingState: {
-    textAlign: "center",
-    padding: "80px 0",
-    color: "#94a3b8",
-    fontFamily: "'Outfit', sans-serif",
-  },
-
-  empty: { textAlign: "center", padding: "80px 0" },
-  emptyImg: {
-    width: 200,
-    height: 140,
-    objectFit: "cover",
-    borderRadius: 16,
-    marginBottom: 20,
-    opacity: 0.55,
-  },
-  emptyTitle: {
-    fontFamily: "'Syne', sans-serif",
-    fontSize: 22,
+    padding: "10px 20px",
+    borderRadius: 8,
     fontWeight: 700,
+    fontSize: 11,
+    letterSpacing: 1.5,
+    textTransform: "uppercase",
+    fontFamily: F,
+    flexShrink: 0,
+  },
+  empty: { textAlign: "center", padding: "80px 0" },
+  emptyTitle: {
+    fontFamily: F,
+    fontSize: 18,
+    fontWeight: 800,
     color: "#0f172a",
+    letterSpacing: 1,
     marginBottom: 8,
   },
-  emptySub: {
-    fontFamily: "'Outfit', sans-serif",
-    color: "#94a3b8",
-    fontSize: 15,
-    marginBottom: 24,
-  },
+  emptySub: { fontFamily: F, color: "#94a3b8", fontSize: 14, marginBottom: 24 },
   emptyBtn: {
-    background: "#1e2d4a",
+    background: "#0f172a",
     color: "white",
-    padding: "12px 28px",
-    borderRadius: 10,
-    fontWeight: 600,
-    fontSize: 15,
-    fontFamily: "'Outfit', sans-serif",
+    padding: "11px 24px",
+    borderRadius: 9,
+    fontWeight: 700,
+    fontSize: 11,
+    letterSpacing: 1.5,
+    textTransform: "uppercase",
+    fontFamily: F,
     display: "inline-block",
   },
-
-  list: { display: "flex", flexDirection: "column", gap: 12 },
+  list: { display: "flex", flexDirection: "column", gap: 10 },
   row: {
     background: "white",
-    borderRadius: 14,
-    padding: "16px 20px",
-    border: "1px solid #eef0f5",
-    boxShadow: "0 2px 8px rgba(30,45,74,0.05)",
+    borderRadius: 12,
+    padding: "14px 18px",
+    border: "1px solid #f3f4f6",
+    boxShadow: "0 1px 8px rgba(0,0,0,0.05)",
     display: "flex",
     alignItems: "center",
-    gap: 18,
+    gap: 16,
   },
   rowImg: {
-    width: 80,
-    height: 72,
+    width: 72,
+    height: 64,
     objectFit: "cover",
-    borderRadius: 10,
+    borderRadius: 8,
     flexShrink: 0,
   },
-  rowInfo: { flex: 1 },
+  rowInfo: { flex: 1, minWidth: 0 },
   rowTitle: {
-    fontFamily: "'Syne', sans-serif",
-    fontSize: 16,
-    fontWeight: 700,
+    fontFamily: F,
+    fontSize: 14,
+    fontWeight: 800,
     color: "#0f172a",
-    marginBottom: 6,
+    marginBottom: 5,
+    letterSpacing: 0.2,
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   },
   rowMeta: {
-    fontFamily: "'Outfit', sans-serif",
-    fontSize: 13,
-    color: "#64748b",
+    fontFamily: F,
+    fontSize: 12,
+    color: "#9ca3af",
     display: "flex",
     alignItems: "center",
-    gap: 5,
+    gap: 4,
+    flexWrap: "wrap",
   },
   rowPrice: {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: F,
     fontWeight: 800,
-    fontSize: 17,
-    color: "#1e2d4a",
+    fontSize: 15,
+    color: "#0f172a",
     flexShrink: 0,
   },
-  rowActions: { display: "flex", gap: 8, flexShrink: 0 },
+  rowActions: { display: "flex", gap: 6, flexShrink: 0 },
   viewBtn: {
-    background: "#f8f9fc",
-    color: "#475569",
-    border: "1px solid #eef0f5",
-    padding: "8px 14px",
-    borderRadius: 8,
-    fontSize: 13,
-    fontWeight: 600,
-    fontFamily: "'Outfit', sans-serif",
+    background: "#f9fafb",
+    color: "#374151",
+    border: "1px solid #e5e7eb",
+    padding: "7px 12px",
+    borderRadius: 7,
+    fontSize: 11,
+    fontWeight: 700,
+    fontFamily: F,
+    letterSpacing: 0.5,
   },
   editBtn: {
-    background: "#1e2d4a",
+    background: "#0f172a",
     color: "white",
-    padding: "8px 14px",
-    borderRadius: 8,
-    fontSize: 13,
-    fontWeight: 600,
-    fontFamily: "'Outfit', sans-serif",
+    padding: "7px 12px",
+    borderRadius: 7,
+    fontSize: 11,
+    fontWeight: 700,
+    fontFamily: F,
+    letterSpacing: 0.5,
   },
   deleteBtn: {
     background: "white",
     color: "#ef4444",
     border: "1px solid #fecaca",
-    padding: "8px 14px",
-    borderRadius: 8,
-    fontSize: 13,
-    fontWeight: 600,
+    padding: "7px 12px",
+    borderRadius: 7,
+    fontSize: 11,
+    fontWeight: 700,
     cursor: "pointer",
-    fontFamily: "'Outfit', sans-serif",
+    fontFamily: F,
+    letterSpacing: 0.5,
   },
 };

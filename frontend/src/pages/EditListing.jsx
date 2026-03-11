@@ -39,7 +39,7 @@ export default function EditListing() {
       toast.success("Updated!");
       navigate(`/listing/${id}`);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Update failed");
+      toast.error(err.response?.data?.message || "Failed");
     } finally {
       setLoading(false);
     }
@@ -47,14 +47,15 @@ export default function EditListing() {
 
   return (
     <div style={s.page}>
+      <style>{css}</style>
       <h1 style={s.title}>Edit Experience</h1>
-      <p style={s.sub}>Update the details of your listing</p>
+      <p style={s.sub}>Update your listing details</p>
 
       <form onSubmit={handleSubmit} style={s.form}>
         {[
-          { key: "title", label: "Title", type: "text", required: true },
-          { key: "location", label: "Location", type: "text", required: true },
-          { key: "imageUrl", label: "Image URL", type: "url", required: true },
+          { key: "title", label: "Title", type: "text", req: true },
+          { key: "location", label: "Location", type: "text", req: true },
+          { key: "imageUrl", label: "Image URL", type: "url", req: true },
         ].map((f) => (
           <div key={f.key} style={s.field}>
             <label style={s.label}>{f.label}</label>
@@ -62,7 +63,7 @@ export default function EditListing() {
               type={f.type}
               value={form[f.key]}
               onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
-              required={f.required}
+              required={f.req}
             />
           </div>
         ))}
@@ -77,7 +78,19 @@ export default function EditListing() {
           />
         </div>
         <div style={s.field}>
-          <label style={s.label}>Price (optional)</label>
+          <label style={s.label}>
+            Price{" "}
+            <span
+              style={{
+                color: "#94a3b8",
+                fontWeight: 500,
+                textTransform: "none",
+                letterSpacing: 0,
+              }}
+            >
+              (optional)
+            </span>
+          </label>
           <input
             type="number"
             min="0"
@@ -94,7 +107,12 @@ export default function EditListing() {
           >
             Cancel
           </button>
-          <button type="submit" disabled={loading} style={s.btn}>
+          <button
+            type="submit"
+            disabled={loading}
+            style={s.btn}
+            className="edit-btn"
+          >
             {loading ? "Saving…" : "Save Changes"}
           </button>
         </div>
@@ -103,52 +121,70 @@ export default function EditListing() {
   );
 }
 
+const css = `
+  .edit-btn:hover:not(:disabled) { opacity:0.88 !important; }
+  @media (max-width: 600px) {
+    .edit-page { padding: 32px 20px 60px !important; }
+  }
+`;
+const F = "'Raleway', sans-serif";
 const s = {
-  page: { maxWidth: 640, margin: "0 auto", padding: "52px 48px 80px" },
+  page: { maxWidth: 600, margin: "0 auto", padding: "48px 48px 80px" },
   title: {
-    fontFamily: "'Syne', sans-serif",
-    fontSize: 32,
+    fontFamily: F,
+    fontSize: "clamp(22px, 3vw, 30px)",
     fontWeight: 800,
     color: "#0f172a",
-    marginBottom: 8,
+    letterSpacing: 1,
+    textTransform: "uppercase",
+    marginBottom: 6,
   },
   sub: {
-    fontFamily: "'Outfit', sans-serif",
+    fontFamily: F,
     color: "#64748b",
-    fontSize: 15,
-    marginBottom: 36,
-  },
-  form: { display: "flex", flexDirection: "column", gap: 22 },
-  field: { display: "flex", flexDirection: "column", gap: 8 },
-  label: {
-    fontFamily: "'Outfit', sans-serif",
-    fontWeight: 600,
     fontSize: 14,
-    color: "#0f172a",
+    fontWeight: 500,
+    marginBottom: 32,
   },
-  btnRow: { display: "flex", gap: 12, marginTop: 4 },
+  form: { display: "flex", flexDirection: "column", gap: 18 },
+  field: { display: "flex", flexDirection: "column", gap: 7 },
+  label: {
+    fontFamily: F,
+    fontWeight: 800,
+    fontSize: 10,
+    color: "#0f172a",
+    letterSpacing: 1.5,
+    textTransform: "uppercase",
+  },
+  btnRow: { display: "flex", gap: 10, marginTop: 4, flexWrap: "wrap" },
   btn: {
     flex: 1,
-    background: "#1e2d4a",
+    background: "#0f172a",
     color: "white",
-    padding: "14px",
-    borderRadius: 10,
-    fontWeight: 700,
-    fontSize: 15,
+    padding: "13px",
+    borderRadius: 9,
+    fontWeight: 800,
+    fontSize: 11,
+    letterSpacing: 2,
+    textTransform: "uppercase",
     cursor: "pointer",
     border: "none",
-    fontFamily: "'Outfit', sans-serif",
+    fontFamily: F,
+    minWidth: 120,
   },
   cancelBtn: {
     flex: 1,
     background: "white",
-    color: "#64748b",
-    border: "1.5px solid #eef0f5",
-    padding: "14px",
-    borderRadius: 10,
-    fontWeight: 600,
-    fontSize: 15,
+    color: "#6b7280",
+    border: "1.5px solid #e5e7eb",
+    padding: "12px",
+    borderRadius: 9,
+    fontWeight: 700,
+    fontSize: 11,
+    letterSpacing: 1.5,
+    textTransform: "uppercase",
     cursor: "pointer",
-    fontFamily: "'Outfit', sans-serif",
+    fontFamily: F,
+    minWidth: 120,
   },
 };
