@@ -62,10 +62,7 @@ export default function ListingDetail() {
   return (
     <div style={s.page}>
       <style>{css}</style>
-      <div
-        style={s.hero}
-        style={{ ...s.hero, backgroundImage: `url(${listing.imageUrl})` }}
-      >
+      <div style={{ ...s.hero, backgroundImage: `url(${listing.imageUrl})` }}>
         <div style={s.heroOverlay} />
         <div style={s.heroContent}>
           <Link to="/" style={s.backBtn}>
