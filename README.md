@@ -210,9 +210,3 @@ wandr/
 
 ## Live Demo
 
-- **Frontend:** https://wandr.vercel.app
-- **Backend:** https://wandr-api.railway.app
-
----
-
-*Built by [Your Name] — submitted for the Lynkerr 48-hour assignment.*
